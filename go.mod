@@ -1,4 +1,4 @@
-module goat.industries/newDirectory/kronos
+module github.com/BMWE30/kronos
 
 go 1.15
 
