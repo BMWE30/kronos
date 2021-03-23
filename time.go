@@ -3,6 +3,7 @@ package kronos
 import (
 	"context"
 	"errors"
+	"github.com/gogo/protobuf/proto"
 	"time"
 
 	"github.com/rubrikinc/kronos/kronoshttp"
@@ -49,6 +50,10 @@ func Stop(kronosServer *server.Server) {
 // IsActive returns whether kronos is running.
 func IsActive(kronosServer *server.Server) bool {
 	return kronosServer != nil
+}
+
+func IsOracle(ctx context.Context, kronosServer *server.Server) bool {
+	return proto.Equal(kronosServer.GRPCAddr, kronosServer.OracleSM.State(ctx).Oracle)
 }
 
 // Now returns Kronos time if Kronos is initialized, otherwise returns
