@@ -11,21 +11,21 @@ import (
 	"github.com/rubrikinc/kronos/server"
 )
 
-var kronosServer *server.Server
+//var kronosServer *server.Server
 
 // Initialize initializes the kronos server.
 // After Initialization, Now() in this package returns kronos time.
 // If not initialized, Now() in this package returns system time
-func Initialize(ctx context.Context, config server.Config) error {
+func Initialize(ctx context.Context, config server.Config) (*server.Server, error) {
 	// Stop previous server
-	if kronosServer != nil {
-		kronosServer.Stop()
-	}
+	//if kronosServer != nil {
+	//	kronosServer.Stop()
+	//}
 
 	var err error
-	kronosServer, err = server.NewKronosServer(ctx, config)
+	kronosServer, err := server.NewKronosServer(ctx, config)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	go func() {
@@ -35,11 +35,11 @@ func Initialize(ctx context.Context, config server.Config) error {
 	}()
 
 	log.Info(ctx, "Kronos server initialized")
-	return nil
+	return kronosServer, nil
 }
 
 // Stop stops the kronos server
-func Stop() {
+func Stop(kronosServer *server.Server) {
 	if kronosServer != nil {
 		kronosServer.Stop()
 		log.Info(context.TODO(), "Kronos server stopped")
@@ -47,13 +47,13 @@ func Stop() {
 }
 
 // IsActive returns whether kronos is running.
-func IsActive() bool {
+func IsActive(kronosServer *server.Server) bool {
 	return kronosServer != nil
 }
 
 // Now returns Kronos time if Kronos is initialized, otherwise returns
 // system time
-func Now() int64 {
+func Now(kronosServer *server.Server) int64 {
 	if kronosServer == nil {
 		log.Fatalf(context.TODO(), "Kronos server is not initialized")
 	}
@@ -80,7 +80,7 @@ func Now() int64 {
 
 // NodeID returns the NodeID of the kronos server in the kronos raft cluster.
 // NodeID returns an empty string if kronosServer is not initialized
-func NodeID(ctx context.Context) string {
+func NodeID(ctx context.Context, kronosServer *server.Server) string {
 	if kronosServer == nil {
 		return ""
 	}
@@ -94,7 +94,7 @@ func NodeID(ctx context.Context) string {
 }
 
 // RemoveNode removes the given node from the kronos raft cluster
-func RemoveNode(ctx context.Context, nodeID string) error {
+func RemoveNode(ctx context.Context, nodeID string, kronosServer *server.Server) error {
 	if len(nodeID) == 0 {
 		return errors.New("node id is empty")
 	}
@@ -112,7 +112,7 @@ func RemoveNode(ctx context.Context, nodeID string) error {
 }
 
 // Metrics returns KronosMetrics
-func Metrics() *kronosstats.KronosMetrics {
+func Metrics(kronosServer *server.Server) *kronosstats.KronosMetrics {
 	if kronosServer == nil {
 		return nil
 	}
