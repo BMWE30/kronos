@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/rubrikinc/kronos/kronosstats"
-	"github.com/rubrikinc/kronos/oracle"
+	"github.com/BMWE30/kronos/oracle"
 	"github.com/rubrikinc/kronos/pb"
 	"github.com/rubrikinc/kronos/tm"
 )

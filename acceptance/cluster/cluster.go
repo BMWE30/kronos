@@ -30,7 +30,7 @@ import (
 	"github.com/rubrikinc/kronos/kronosutil/log"
 	"github.com/rubrikinc/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
-	"github.com/rubrikinc/kronos/server"
+	"github.com/BMWE30/kronos/server"
 )
 
 // We are using goreman to control the different kronos processes. goreman uses

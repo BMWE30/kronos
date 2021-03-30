@@ -10,7 +10,7 @@ import (
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
 	"github.com/rubrikinc/kronos/pb"
-	"github.com/rubrikinc/kronos/server"
+	"github.com/BMWE30/kronos/server"
 )
 
 var timeCtx struct {

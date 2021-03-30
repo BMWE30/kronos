@@ -18,6 +18,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/scaledata/etcd/etcdserver/stats"
 	"github.com/scaledata/etcd/pkg/fileutil"
+	"github.com/scaledata/etcd/pkg/transport"
 	"github.com/scaledata/etcd/pkg/types"
 	"github.com/scaledata/etcd/raft"
 	"github.com/scaledata/etcd/raft/sdraftpb"
@@ -211,6 +212,58 @@ type raftNode struct {
 	snapTriggerConfig *snapTriggerConfig
 }
 
+func (rc *raftNode) AddNewSeedHosts(newSeedHosts []*kronospb.NodeAddr, ctx context.Context){
+	if err := retry.ForDuration(
+		time.Minute,
+		func() error {
+			// try on both the seedHosts to maintain one seedHost failure tolerance
+			for _, seed := range newSeedHosts {
+				// The second seedHost tries AddNode on the first seed host only
+				// during the start of the cluster.
+				// This is based on the assumption that the first seedHost will not
+				// fail when the cluster is being bootstrapped for the first time.
+				// We don't guarantee seedHost failure tolerance for bootstrap which
+				// is one time event in the lifetime of the cluster.
+				if proto.Equal(seed, rc.localAddr) {
+					continue
+				}
+				c, err := kronoshttp.NewClusterClient(seed, transport.TLSInfo{})
+				if err != nil {
+					log.Errorf(
+						ctx,
+						"Failed to create clusterClient for host %v, error: %v",
+						seed,
+						err,
+					)
+					continue
+				}
+				defer c.Close()
+				request := &kronoshttp.AddNodeRequest{
+					NodeID:  rc.nodeID,
+					Address: kronosutil.NodeAddrToString(rc.localAddr),
+				}
+				ctxWithTimeout, cancelFunc := context.WithTimeout(ctx, clusterRequestTimeout)
+				defer cancelFunc()
+				err = c.AddNode(ctxWithTimeout, request)
+				if err != nil {
+					log.Errorf(
+						ctxWithTimeout,
+						"Failed to addNode, request: %v, error: %v",
+						request,
+						err,
+					)
+					continue
+				}
+				// Add node request succeeded without errors.
+				return nil
+			}
+			return errors.New("add node request failed on all the seed hosts")
+		},
+	); err != nil {
+		log.Fatalf(ctx, "Failed to post add node request to %v, err: %v", rc.seedHosts[0], err)
+	}
+}
+
 // getNodesIncludingRemoved gets nodes in the cluster metadata from
 // the remote node. It retries internally for 1 minute.
 func (rc *raftNode) getNodesIncludingRemoved(
@@ -372,7 +425,7 @@ var _ rafthttp.Raft = &raftNode{}
 // read errorC.
 func newRaftNode(
 	rc *RaftConfig, getSnapshot func() ([]byte, error), proposeC <-chan string, nodeID string,
-) (<-chan string, <-chan error, <-chan *snap.Snapshotter) {
+) (<-chan string, <-chan error, <-chan *snap.Snapshotter, *raftNode) {
 	ctx := context.Background()
 	seedHosts, err := convertToNodeAddrs(rc.SeedHosts)
 	if err != nil {
@@ -404,7 +457,7 @@ func newRaftNode(
 		// rest of structure populated after WAL replay
 	}
 	go rn.startRaft(ctx, confChangeC, rc.CertsDir, rc.GRPCHostPort)
-	return commitC, errorC, rn.snapshotterReady
+	return commitC, errorC, rn.snapshotterReady, rn
 }
 
 func (rc *raftNode) purgeFiles(ctx context.Context) {

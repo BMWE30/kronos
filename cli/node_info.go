@@ -8,7 +8,7 @@ import (
 	"github.com/rubrikinc/kronos/kronoshttp"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/pb"
-	"github.com/rubrikinc/kronos/server"
+	"github.com/BMWE30/kronos/server"
 )
 
 type errMap map[string]error

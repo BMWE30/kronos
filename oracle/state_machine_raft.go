@@ -44,6 +44,9 @@ type RaftStateMachine struct {
 	getSnapshotC chan struct{}
 	// closer is a cleanup function
 	closer func()
+
+	//raftNode
+	raftNode *raftNode
 }
 
 // convertToNodeAddrs converts a slice of host:port to a slice of
@@ -69,13 +72,14 @@ func NewRaftStateMachine(ctx context.Context, rc *RaftConfig) StateMachine {
 	proposeC := make(chan string)
 	getSnapshot := func() ([]byte, error) { return raftStateMachine.GetSnapshot(ctx) }
 	nodeID := metadata.FetchOrAssignNodeID(ctx, rc.DataDir).String()
-	commitC, errorC, snapshotterReady := newRaftNode(rc, getSnapshot, proposeC, nodeID)
+	commitC, errorC, snapshotterReady, rn := newRaftNode(rc, getSnapshot, proposeC, nodeID)
 
 	raftStateMachine = &RaftStateMachine{
 		proposeC:     proposeC,
 		snapshotter:  <-snapshotterReady,
 		stateMachine: NewMemStateMachine().(*inMemStateMachine),
 		getSnapshotC: make(chan struct{}),
+		raftNode: rn,
 	}
 	raftStateMachine.closer = func() {
 		close(proposeC)
@@ -88,6 +92,31 @@ func NewRaftStateMachine(ctx context.Context, rc *RaftConfig) StateMachine {
 	go raftStateMachine.readCommits(context.Background(), commitC, errorC)
 	return raftStateMachine
 }
+
+func (s *RaftStateMachine) AddNewSeedHosts(newSeedHosts []string){
+	addrs, err := convertToNodeAddrs(newSeedHosts)
+	if err != nil{
+		log.Info(context.Background(), err)
+	}
+	s.raftNode.AddNewSeedHosts(addrs, context.Background())
+}
+
+func (s *RaftStateMachine) AddNode(id string, addr string){
+	nodeAddr, err := kronosutil.NodeAddr(addr)
+	if err != nil{
+		log.Error(context.Background(), err)
+		return
+	}
+	s.raftNode.addNode(id, nodeAddr)
+	if err := s.raftNode.cluster.Persist(); err != nil {
+		log.Fatalf(context.Background(), "Failed to persist cluster, error: %v", err)
+	}
+	//s.raftNode.updateClusterFromConfState(context.Background())
+}
+func (s *RaftStateMachine) GetID()string{
+	return s.raftNode.nodeID
+}
+
 
 // Close cleans up RaftStateMachine
 func (s *RaftStateMachine) Close() {

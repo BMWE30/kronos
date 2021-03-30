@@ -17,7 +17,7 @@ import (
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
 	"github.com/rubrikinc/kronos/metadata"
-	"github.com/rubrikinc/kronos/oracle"
+	"github.com/BMWE30/kronos/oracle"
 	"github.com/rubrikinc/kronos/pb"
 	"github.com/rubrikinc/kronos/tm"
 )
@@ -111,6 +111,18 @@ func (k *Server) Status(
 		OracleState:  k.OracleSM.State(ctx),
 		Delta:        k.OracleDelta.Load(),
 	}, nil
+}
+
+func (k *Server) AddNewSeedHosts(newSeedHosts []string){
+	k.OracleSM.(*oracle.RaftStateMachine).AddNewSeedHosts(newSeedHosts)
+}
+
+func (k *Server) AddNode(id, addr string){
+	k.OracleSM.(*oracle.RaftStateMachine).AddNode(id, addr)
+}
+
+func (k *Server) GetID()string{
+	return k.OracleSM.(*oracle.RaftStateMachine).GetID()
 }
 
 // OracleTime returns the current KronosTime if the this server is the elected

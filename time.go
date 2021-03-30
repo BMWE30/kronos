@@ -9,7 +9,7 @@ import (
 	"github.com/rubrikinc/kronos/kronoshttp"
 	"github.com/rubrikinc/kronos/kronosstats"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/rubrikinc/kronos/server"
+	"github.com/BMWE30/kronos/server"
 )
 
 //var kronosServer *server.Server
@@ -96,6 +96,14 @@ func NodeID(ctx context.Context, kronosServer *server.Server) string {
 	}
 
 	return id
+}
+
+func GetID(kronosServer *server.Server) string{
+	return kronosServer.GetID()
+}
+
+func AddNode(kronosServer *server.Server, id, addr string){
+	kronosServer.AddNode(id, addr)
 }
 
 // RemoveNode removes the given node from the kronos raft cluster

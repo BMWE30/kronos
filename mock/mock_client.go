@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/rubrikinc/kronos/pb"
-	"github.com/rubrikinc/kronos/server"
+	"github.com/BMWE30/kronos/server"
 )
 
 // Client is an in memory implementation of Client used in tests
