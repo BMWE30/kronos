@@ -246,7 +246,7 @@ func runStart() {
 			SnapCount: startCtx.raftSnapCount,
 		},
 	}
-	server, err := server.NewKronosServer(ctx, config)
+	server, err := server.NewKronosServer(ctx, config, server.GenerateNewNodeID())
 	if err != nil {
 		log.Fatal(ctx, err)
 	}

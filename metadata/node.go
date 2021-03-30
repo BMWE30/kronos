@@ -48,6 +48,31 @@ func FetchOrAssignNodeID(ctx context.Context, dataDir string) (id types.ID) {
 	return
 }
 
+
+func GenerateNewNodeID() types.ID{
+	return newNodeID()
+}
+
+func PersistNewNodeID(ctx context.Context, id string, dataDir string)  {
+	//nodeID, err := types.IDFromString(id)
+	//if err != nil{
+	//	return err
+	//}
+
+	nodeInfoFile := nodeInfoFilePath(dataDir)
+	if _, err := os.Stat(nodeInfoFile); err != nil {
+		if os.IsNotExist(err) {
+			if err := checksumfile.Write(nodeInfoFile, []byte(id)); err != nil {
+				log.Fatalf(ctx, "Failed to write nodeID to file, error: %v", err)
+			}
+		} else {
+			log.Fatal(ctx, err)
+		}
+	}
+
+}
+
+
 // FetchNodeID returns the nodeID if nodeInfoFile exists in data directory
 // Otherwise it returns an error
 func FetchNodeID(dataDir string) (id types.ID, err error) {

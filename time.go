@@ -17,14 +17,14 @@ import (
 // Initialize initializes the kronos server.
 // After Initialization, Now() in this package returns kronos time.
 // If not initialized, Now() in this package returns system time
-func Initialize(ctx context.Context, config server.Config) (*server.Server, error) {
+func Initialize(ctx context.Context, config server.Config, selfID string) (*server.Server, error) {
 	// Stop previous server
 	//if kronosServer != nil {
 	//	kronosServer.Stop()
 	//}
 
 	var err error
-	kronosServer, err := server.NewKronosServer(ctx, config)
+	kronosServer, err := server.NewKronosServer(ctx, config, selfID)
 	if err != nil {
 		return nil, err
 	}
@@ -130,4 +130,8 @@ func Metrics(kronosServer *server.Server) *kronosstats.KronosMetrics {
 		return nil
 	}
 	return kronosServer.Metrics
+}
+
+func GenerateNewNodeID() string{
+	return server.GenerateNewNodeID()
 }

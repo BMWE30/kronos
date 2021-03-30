@@ -8,7 +8,7 @@ import (
 
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/rubrikinc/kronos/metadata"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 )
 
@@ -67,11 +67,16 @@ var _ StateMachine = &RaftStateMachine{}
 
 // NewRaftStateMachine returns an instance of a distributed oracle state
 // machine managed by raft
-func NewRaftStateMachine(ctx context.Context, rc *RaftConfig) StateMachine {
+func NewRaftStateMachine(ctx context.Context, rc *RaftConfig, nodeID string) StateMachine {
 	var raftStateMachine *RaftStateMachine
 	proposeC := make(chan string)
 	getSnapshot := func() ([]byte, error) { return raftStateMachine.GetSnapshot(ctx) }
-	nodeID := metadata.FetchOrAssignNodeID(ctx, rc.DataDir).String()
+	if nodeID == ""{
+		nodeID = metadata.FetchOrAssignNodeID(ctx, rc.DataDir).String()
+	} else {
+		metadata.PersistNewNodeID(ctx, nodeID, rc.DataDir)
+	}
+
 	commitC, errorC, snapshotterReady, rn := newRaftNode(rc, getSnapshot, proposeC, nodeID)
 
 	raftStateMachine = &RaftStateMachine{

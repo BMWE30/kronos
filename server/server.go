@@ -16,7 +16,7 @@ import (
 	"github.com/rubrikinc/kronos/kronosstats"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/rubrikinc/kronos/metadata"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/BMWE30/kronos/oracle"
 	"github.com/rubrikinc/kronos/pb"
 	"github.com/rubrikinc/kronos/tm"
@@ -608,6 +608,10 @@ func (k *Server) ID() (string, error) {
 	return id.String(), nil
 }
 
+func GenerateNewNodeID() string{
+	return metadata.GenerateNewNodeID().String()
+}
+
 // Config is used to initialize a kronos server based on the given parameters
 type Config struct {
 	*oracle.RaftConfig
@@ -624,8 +628,8 @@ type Config struct {
 
 // NewKronosServer returns an instance of Server based on given
 // configurations
-func NewKronosServer(ctx context.Context, config Config) (*Server, error) {
-	oracleSM := oracle.NewRaftStateMachine(ctx, config.RaftConfig)
+func NewKronosServer(ctx context.Context, config Config, selfID string) (*Server, error) {
+	oracleSM := oracle.NewRaftStateMachine(ctx, config.RaftConfig, selfID)
 
 	return &Server{
 		Clock:                    config.Clock,
