@@ -74,6 +74,8 @@ var defaultRE = func() *regexp.Regexp {
 	}
 	if !strings.HasSuffix(root, sep+"src") && !strings.HasSuffix(root, sep+"vendor") {
 		panic("unable to find base path for default call resolver, got " + root)
+	} else {
+		panic("able to find base path for default call resolver, got " + root)
 	}
 	return regexp.MustCompile(regexp.QuoteMeta(root) + pkgStrip)
 }()
