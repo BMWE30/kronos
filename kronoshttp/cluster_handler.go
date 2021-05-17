@@ -16,9 +16,9 @@ import (
 	"github.com/scaledata/etcd/pkg/types"
 	"github.com/scaledata/etcd/raft/sdraftpb"
 
-	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 )
 

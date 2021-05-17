@@ -27,10 +27,10 @@ import (
 	"github.com/scaledata/etcd/wal"
 	"github.com/scaledata/etcd/wal/sdwalpb"
 
-	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/kronoshttp"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 )
 

@@ -6,9 +6,9 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/protoutil"
 	"github.com/scaledata/etcd/snap"
 
-	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 )
 
