@@ -11,7 +11,7 @@ import (
 	"github.com/scaledata/etcd/raft/sdraftpb"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/rubrikinc/kronos/metadata"
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 )
 

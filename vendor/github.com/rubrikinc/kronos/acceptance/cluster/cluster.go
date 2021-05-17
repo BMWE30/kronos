@@ -25,10 +25,10 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/randutil"
 	"github.com/cockroachdb/cockroach/pkg/util/syncutil"
 
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/acceptance/testutil"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/pb"
 	"github.com/rubrikinc/kronos/server"
 )

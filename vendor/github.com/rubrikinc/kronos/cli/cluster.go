@@ -13,9 +13,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
+	"github.com/BMWE30/kronos/metadata"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/BMWE30/kronos/metadata"
 )
 
 const (
