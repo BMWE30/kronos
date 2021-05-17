@@ -15,7 +15,7 @@ import (
 
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/kronosutil/log"
-	"github.com/rubrikinc/kronos/metadata"
+	"github.com/BMWE30/kronos/metadata"
 )
 
 const (
