@@ -8,14 +8,14 @@ An example is:
     	filename := "var/lib/kronos/nodeInfo" // directory in which file is
     	// stored should exist beforehand and have w and x permissions for user,
      	// otherwise write will fail.
-    	if err :=  checksumfile.Write(filename, data) {
+    	if err :=  checksumfile-updated.Write(filename, data) {
     		panic(err)
     	}
-    	read, err := checksumfile.Read(filename)
+    	read, err := checksumfile-updated.Read(filename)
     	if err != nil {
     		panic(err)
     	}
       fmt.Println(read)
     }
 */
-package checksumfile
+package checksumfile_updated

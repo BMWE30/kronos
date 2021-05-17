@@ -10,7 +10,7 @@
 	It has these top-level messages:
 		FileExtent
 */
-package checksumfile
+package checksumfile_updated
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"

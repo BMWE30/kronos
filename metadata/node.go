@@ -8,7 +8,7 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/randutil"
 	"github.com/scaledata/etcd/pkg/types"
 
-	"github.com/BMWE30/kronos/checksumfile"
+	"github.com/BMWE30/kronos/checksumfile-updated"
 	"github.com/rubrikinc/kronos/kronosutil/log"
 )
 
@@ -34,7 +34,7 @@ func FetchOrAssignNodeID(ctx context.Context, dataDir string) (id types.ID) {
 	if _, err := os.Stat(nodeInfoFile); err != nil {
 		if os.IsNotExist(err) {
 			id = newNodeID()
-			if err := checksumfile.Write(nodeInfoFile, []byte(id.String())); err != nil {
+			if err := checksumfile_updated.Write(nodeInfoFile, []byte(id.String())); err != nil {
 				log.Fatalf(ctx, "Failed to write nodeID to file, error: %v", err)
 			}
 		} else {
@@ -62,7 +62,7 @@ func PersistNewNodeID(ctx context.Context, id string, dataDir string)  {
 	nodeInfoFile := nodeInfoFilePath(dataDir)
 	if _, err := os.Stat(nodeInfoFile); err != nil {
 		if os.IsNotExist(err) {
-			if err := checksumfile.Write(nodeInfoFile, []byte(id)); err != nil {
+			if err := checksumfile_updated.Write(nodeInfoFile, []byte(id)); err != nil {
 				log.Fatalf(ctx, "Failed to write nodeID to file, error: %v", err)
 			}
 		} else {
@@ -81,7 +81,7 @@ func FetchNodeID(dataDir string) (id types.ID, err error) {
 		return 0, err
 	}
 
-	rawNodeID, err := checksumfile.Read(nodeInfoFile)
+	rawNodeID, err := checksumfile_updated.Read(nodeInfoFile)
 	if err != nil {
 		return 0, err
 	}

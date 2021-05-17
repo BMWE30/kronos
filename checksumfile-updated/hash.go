@@ -1,4 +1,4 @@
-package checksumfile
+package checksumfile_updated
 
 import (
 	"bytes"

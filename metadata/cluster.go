@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/scaledata/etcd/pkg/fileutil"
 
-	"github.com/BMWE30/kronos/checksumfile"
+	"github.com/BMWE30/kronos/checksumfile-updated"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/pb"
 )
@@ -98,7 +98,7 @@ func (c *Cluster) Persist() error {
 	if err != nil {
 		return err
 	}
-	return checksumfile.Write(c.filename, data)
+	return checksumfile_updated.Write(c.filename, data)
 }
 
 // NewCluster creates a new Cluster initialized from cluster. If cluster is nil,
@@ -155,7 +155,7 @@ func LoadCluster(dataDir string, readOnly bool) (*Cluster, error) {
 	if err != nil {
 		return nil, err
 	}
-	data, err := checksumfile.Read(c.filename)
+	data, err := checksumfile_updated.Read(c.filename)
 	if err != nil {
 		_ = c.Close()
 		return nil, err
