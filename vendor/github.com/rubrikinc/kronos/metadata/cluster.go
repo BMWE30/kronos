@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/scaledata/etcd/pkg/fileutil"
 
-	"github.com/BMWE30/kronos/checksumfile"
+	"github.com/rubrikinc/kronos/checksumfile"
 	"github.com/rubrikinc/kronos/kronosutil"
 	"github.com/rubrikinc/kronos/pb"
 )

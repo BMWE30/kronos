@@ -8,7 +8,7 @@ import (
 	"github.com/cockroachdb/cockroach/pkg/util/randutil"
 	"github.com/scaledata/etcd/pkg/types"
 
-	"github.com/BMWE30/kronos/checksumfile"
+	"github.com/rubrikinc/kronos/checksumfile"
 	"github.com/rubrikinc/kronos/kronosutil/log"
 )
 
