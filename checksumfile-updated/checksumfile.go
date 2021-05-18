@@ -3,6 +3,7 @@ package checksumfile_updated
 import (
 	"bytes"
 	"crypto/md5"
+	"strings"
 	"hash"
 	"io/ioutil"
 	"os"
@@ -75,9 +76,17 @@ func Read(filename string) ([]byte, error) {
 }
 
 func sync(path string) error {
-	f, err := os.OpenFile(path, os.O_RDWR, 0)
-	if err != nil {
-		return err
+
+	f, err := os.Open(path)
+	if err != nil{
+		if strings.Contains(err.Error(), "Access is denied"){
+			f, err = os.OpenFile(path, os.O_RDWR, 0)
+			if err != nil{
+				return err
+			}
+		} else {
+			return err
+		}
 	}
 	defer f.Close()
 	if err := f.Sync(); err != nil {
