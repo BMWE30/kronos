@@ -88,7 +88,7 @@ func sync(path string) error {
 			return err
 		}
 	}
-	defer f.Close()
+	//defer f.Close()
 	if err := f.Sync(); err != nil {
 		return err
 	}
