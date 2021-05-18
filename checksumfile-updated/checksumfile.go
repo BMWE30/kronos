@@ -77,7 +77,7 @@ func Read(filename string) ([]byte, error) {
 
 func sync(path string) error {
 
-	f, err := os.OpenFile(path, os.O_RDWR, 0644)
+	f, err := os.OpenFile(path, os.O_RDWR, 0)
 	if err != nil{
 		if strings.Contains(err.Error(), "is a directory"){
 			f, err = os.Open(path)
@@ -88,7 +88,7 @@ func sync(path string) error {
 			return err
 		}
 	}
-	//defer f.Close()
+	defer f.Close()
 	if err := f.Sync(); err != nil {
 		return err
 	}
