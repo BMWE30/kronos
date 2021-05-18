@@ -77,7 +77,7 @@ func Read(filename string) ([]byte, error) {
 
 func sync(path string) error {
 
-	f, err := os.OpenFile(path, os.O_RDWR, 0)
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0)
 	if err != nil{
 		if strings.Contains(err.Error(), "is a directory"){
 			f, err = os.Open(path)
