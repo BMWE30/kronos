@@ -3,6 +3,7 @@ package metadata
 import (
 	"bytes"
 	"fmt"
+	"runtime"
 	"net"
 	"os"
 	"path/filepath"
@@ -130,9 +131,13 @@ func emptyCluster(dataDir string, readOnly bool) (*Cluster, error) {
 	}
 	c.mu.cluster = NewClusterProto()
 	if !c.readOnly {
+		flags := os.O_CREATE|os.O_RDWR|os.O_TRUNC
+		if runtime.GOOS == "windows"{
+			flags = os.O_RDWR
+		}
 		lockFile, err := fileutil.TryLockFile(
 			filepath.Join(dataDir, lockFileName),
-			os.O_CREATE|os.O_RDWR|os.O_TRUNC,
+			flags,
 			fileutil.PrivateFileMode,
 		)
 		if err != nil {
