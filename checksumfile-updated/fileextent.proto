@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package rubrik.kronos.checksumfile;
-option go_package = "checksumfile";
+option go_package = "checksumfile-updated";
 
 message FileExtent {
   bytes Checksum = 1;

@@ -40,7 +40,7 @@ func (*FileExtent) ProtoMessage()               {}
 func (*FileExtent) Descriptor() ([]byte, []int) { return fileDescriptorFileextent, []int{0} }
 
 func init() {
-	proto.RegisterType((*FileExtent)(nil), "rubrik.kronos.checksumfile.FileExtent")
+	proto.RegisterType((*FileExtent)(nil), "rubrik.kronos.checksumfile-updated.FileExtent")
 }
 func (m *FileExtent) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
