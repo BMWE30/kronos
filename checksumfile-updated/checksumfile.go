@@ -75,7 +75,8 @@ func Read(filename string) ([]byte, error) {
 }
 
 func sync(path string) error {
-	f, err := os.OpenFile(path, os.O_RDWR, 0644)
+	//f, err := os.OpenFile(path, os.O_RDWR, 0644)
+	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}
