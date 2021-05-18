@@ -77,10 +77,10 @@ func Read(filename string) ([]byte, error) {
 
 func sync(path string) error {
 
-	f, err := os.Open(path)
+	f, err := os.OpenFile(path, os.O_RDWR, 0644)
 	if err != nil{
-		if strings.Contains(err.Error(), "Access is denied"){
-			f, err = os.OpenFile(path, os.O_RDWR, 0)
+		if strings.Contains(err.Error(), "is a directory"){
+			f, err = os.Open(path)
 			if err != nil{
 				return err
 			}
