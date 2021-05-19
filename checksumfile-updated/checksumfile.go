@@ -3,6 +3,7 @@ package checksumfile_updated
 import (
 	"bytes"
 	"crypto/md5"
+	"fmt"
 	"strings"
 	"hash"
 	"io/ioutil"
@@ -90,7 +91,11 @@ func sync(path string) error {
 	}
 	defer f.Close()
 	if err := f.Sync(); err != nil {
-		return err
+		if strings.Contains(err.Error(), "The handle is invalid"){
+			fmt.Println("failed to sync:", err)
+		} else {
+			return err
+		}
 	}
 	return f.Close()
 }
