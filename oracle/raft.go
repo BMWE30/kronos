@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"strings"
 	"io"
 	"net"
 	"net/http"
@@ -642,7 +643,9 @@ func (rc *raftNode) readWAL(
 	var err error
 	if !wal.Exist(rc.waldir) {
 		if err = os.Mkdir(rc.waldir, 0750); err != nil {
-			log.Fatalf(ctx, "Cannot create dir for wal, err: %v", err)
+			if !strings.Contains(err.Error(), "file already exists"){
+				log.Fatalf(ctx, "Cannot create dir for wal, err: %v", err)
+			}
 		}
 		w, err = wal.Create(rc.waldir, nil)
 		if err != nil {
